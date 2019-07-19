@@ -21,6 +21,7 @@ COPY --from=builder /install /usr/local
 COPY ./app_sdk /app/app_sdk
 COPY ./worker /app/worker
 COPY ./common /app/common
+COPY ./walkoff_minio /app/walkoff_minio
 COPY ./umpire /app/umpire
 
 WORKDIR /app

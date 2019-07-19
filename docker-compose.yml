@@ -172,6 +172,23 @@ services:
   #      - walkoff_default
   #    depends_on:
   #      - elasticsearch
+  minio:
+    image: minio/minio
+    networks:
+      - walkoff_default
+    volumes:
+#      - data1:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./apps:/app/apps
+    ports:
+      - "9001:9000"
+    deploy:
+      placement:
+        constraints: [node.role==manager]
+    environment:
+      MINIO_ACCESS_KEY: walkoff
+      MINIO_SECRET_KEY: walkoff123
+    command: server /data
 
   nginx:
     image: 'bitnami/nginx:latest'

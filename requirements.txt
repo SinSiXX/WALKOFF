@@ -1,5 +1,6 @@
 #aiodns
 aiodocker
+minio
 aiohttp
 aioredis
 #cchardet

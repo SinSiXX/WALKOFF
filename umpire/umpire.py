@@ -16,6 +16,7 @@ from docker.types.services import SecretReference
 
 
 from common.config import config
+from walkoff_minio.minio import upload_apps_to_minio
 from common.helpers import send_status_update, UUID_GLOB
 from common.redis_helpers import connect_to_redis_pool, xlen, xdel
 from common.message_types import WorkflowStatusMessage
@@ -89,6 +90,10 @@ class Umpire:
             for signame in {'SIGINT', 'SIGTERM'}:
                 loop.add_signal_handler(getattr(signal, signame), lambda: asyncio.ensure_future(ump.shutdown()))
 
+            try:
+                upload_apps_to_minio()
+            except Exception as e:
+                logger.info(e)
             logger.info("Umpire is ready!")
             await asyncio.gather(asyncio.create_task(ump.workflow_control_listener()),
                                  asyncio.create_task(ump.monitor_queues(autoscale_worker, autoscale_app,
